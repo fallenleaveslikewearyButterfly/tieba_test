@@ -1,6 +1,7 @@
 __author__ = "Liang"
 __Date__ = 2017 / 8 / 16
 import requests
+import re
 from bs4 import BeautifulSoup as bs
 headers={
 "Host":"tieba.baidu.com",
@@ -10,13 +11,21 @@ headers={
 url="http://tieba.baidu.com/f"
 data={"kw":"江汉大学",
     "ie":"utf-8",
-    "pn":"50"
+    "pn":"0"
 }
-
 session=requests.session()
 resp=session.get(url=url,params=data)
 resp.encoding="utf-8"
-print(resp.text)
-# resp2=session.get(url=url,headers=headers,data=data)
-# print(resp2.status_code)
-# print(resp2.text)
+soup=bs(resp.text,'html.parser')
+everytie=soup.find_all("li",class_=" j_thread_list clearfix")
+#获取所有发帖者
+output=open("result.txt","w",encoding="utf-8")
+for j in everytie:
+    Auth=j.find("span",class_=re.compile("tb_icon_author .*"))
+    title=j.find("a",class_="j_th_tit ")
+    creattime=j.find("span",class_="pull-right is_show_create_time").get_text()
+    lstrpltm=j.find("span",class_="threadlist_reply_date pull_right j_reply_data").get_text()
+
+    output.write(Auth.attrs["title"].replace("主题作者: ","")+","+title.attrs["title"]+","+"http://tieba.baidu.com"+title.attrs["href"]+","+creattime+","+lstrpltm+"\n")
+output.close()
+

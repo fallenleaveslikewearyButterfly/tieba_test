@@ -19,13 +19,15 @@ resp.encoding="utf-8"
 soup=bs(resp.text,'html.parser')
 everytie=soup.find_all("li",class_=" j_thread_list clearfix")
 #获取所有发帖者
-output=open("result.txt","w",encoding="utf-8")
+
 for j in everytie:
     Auth=j.find("span",class_=re.compile("tb_icon_author .*"))
     title=j.find("a",class_="j_th_tit ")
     creattime=j.find("span",class_="pull-right is_show_create_time").get_text()
     lstrpltm=j.find("span",class_="threadlist_reply_date pull_right j_reply_data").get_text()
+    followee=j.find("span",class_="threadlist_rep_num center_text",title="回复").get_text()
+    #发帖人头衔
+    authpage="http://tieba.baidu.com"+Auth.find("a",class_="frs-author-name j_user_card vip_red ").attrs["href"]
+    print(Auth.attrs["title"].replace("主题作者: ",""),title.attrs["title"],"http://tieba.baidu.com"+title.attrs["href"],creattime,lstrpltm,followee)
 
-    output.write(Auth.attrs["title"].replace("主题作者: ","")+","+title.attrs["title"]+","+"http://tieba.baidu.com"+title.attrs["href"]+","+creattime+","+lstrpltm+"\n")
-output.close()
 

@@ -14,8 +14,8 @@ class url_manager(object):
             self.new_urls.append(url)
 
     def add_new_urls(self):
-        for x in range(50,100001)[::-50]:
-            url="http://tieba.baidu.com/f?kw=%E6%B1%9F%E6%B1%89%E5%A4%A7%E5%AD%A6&ie=utf-8&pn="+str(x)
+        for x in range(0,2410):
+            url="http://tieba.baidu.com/f?kw=%E6%B1%9F%E6%B1%89%E5%A4%A7%E5%AD%A6&ie=utf-8&pn="+str(x*50)
             self.add_new_url(url)
 
     def has_new_url(self):
